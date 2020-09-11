@@ -1,0 +1,67 @@
+{% extends "general.html" %}
+
+{% block body %}
+<section class="bg-login">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <div class="wrapper-page">
+                    <div class="account-pages">
+                        <div class="account-box">
+                            <div class="card m-b-30">
+                                <div class="card-body">
+                                    <div class="card-title text-center">
+                                        <img src="{{ url_for('static', filename='images/logo_sm_2.png') }}" alt="" class="">
+                                        <h5 class="mt-3"><b>Register</b></h5>
+                                    </div> 
+                                    <form class="form mt-5 contact-form" action="{{ url_for('register') }}" method="POST">
+                                        <div class="form-group ">
+                                            <div class="col-sm-12">
+                                                {% if error %} {{error}} {% endif %}     
+                                                <input class="form-control form-control-line" name='full_name' type="text" placeholder="Full Name" required="required">
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <div class="col-sm-12">
+                                                <input class="form-control form-control-line" name='email' type="email" placeholder="Email" required="required">
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <div class="col-sm-12">
+                                                <input class="form-control form-control-line" name='password' type="password" placeholder="Password" required="required">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-12">
+                                                <label class="cr-styled">
+                                                    <input type="checkbox" checked>
+                                                    <i class="fa"></i> 
+                                                    I accept <a href="">Terms and Conditions</a>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <div class="col-sm-12 mt-4">
+                                                <button class="btn btn-primary btn-block" type="submit">Sign Up Free</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-12 mt-4 text-center">
+                                                <a href="pages-login.html">Already have an account ?</a>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

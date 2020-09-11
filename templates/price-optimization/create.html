@@ -1,0 +1,89 @@
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+<div class="page-head">
+    <h4 class="my-2">Price Optimization</h4>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card m-b-30">
+            <div class="card-body">
+                <h5 class="header-title pb-3">Input Variables</h5>           
+                <div class="general-label">
+                    <form role="form" action="{{ url_for('createPriceOptimization') }}" method="POST">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="product_name">Product name</label>
+                                <input type="text" class="form-control" name='product_name' id='product_name' required value='test'>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="product_code">Product code</label>
+                                <input type="text" class="form-control" name='product_code' id='product_code' required value='test'>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="time_steps">Time Steps</label>
+                                <input type="number" class="form-control" name='time_steps' id='time_steps' required value='20'>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="max_price">Maximum valid price</label>
+                                <input type="number" class="form-control" name='max_price' id='max_price' required value='500'>
+                            </div>
+                        </div> 
+                        <div class="form-row">                            
+                            <div class="form-group col-md-3">
+                                <label for="price_step">Price step</label>
+                                <input type="number" class="form-control" name='price_step' id='price_step' required value='10'>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="intercept_demand">Intercept in the demand function</label>
+                                <input type="number" class="form-control" name='intercept_demand' id='intercept_demand' required value='5000'>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="slope_demand">Slope in the demand function</label>
+                                <input type="number" class="form-control" name="slope_demand" id="slope_demand" required value='20'>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="product_cost">Product cost</label>
+                                <input type="number" class="form-control" name='product_cost' id="product_cost" required value='100'>
+                            </div>
+                        </div> 
+                        <div class="form-row">                            
+                            <div class="form-group col-md-3">
+                                <label for="increase_coefficient">Coefficient for price increase</label>
+                                <input type="number" class="form-control" name='increase_coefficient' id="increase_coefficient" required value='300'>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="decrease_coefficient">Coefficient for price decrease</label>
+                                <input type="number" class="form-control" name='decrease_coefficient' id="decrease_coefficient" required value='100'>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="product_name">Gamma</label>
+                                <input type="number" class="form-control" name='gamma' id='gamma' required value='1'>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="product_code">Target Update</label>
+                                <input type="number" class="form-control" name='target_update' id='target_update' required value='20'>
+                            </div>
+                        </div>
+                        <div class="form-row">                            
+                            <div class="form-group col-md-3">
+                                <label for="time_steps">Batch Size</label>
+                                <input type="number" class="form-control" name='batch_size' id='batch_size' required value='512'>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="time_steps">Learning Rate</label>
+                                <input type="number" class="form-control" name='learning_rate' id='learning_rate' required value='0.005'>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="time_steps"># of Episodes</label>
+                                <input type="number" class="form-control" name='num_episodes' id='num_episodes' required value='100'>
+                            </div>
+                        </div>                        
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>                                    
+                </div>                            
+            </div>
+        </div>
+    </div>
+</div><!--end row-->
+{% endblock %}

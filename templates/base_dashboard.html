@@ -1,0 +1,143 @@
+{% extends "general.html" %}
+{% block body %}
+<section>
+    <!-- sidebar left start-->
+    <div class="sidebar-left">
+        <div class="sidebar-left-info">
+
+            <div class="user-box">
+                <div class="d-flex justify-content-center">
+                    <img src="{{ url_for('static', filename='images/users/photo.jpeg') }}" alt="" class="img-fluid rounded-circle"> 
+                </div>
+                <div class="text-center text-white mt-2">
+                    <h6> {{ email }} </h6>
+                    <p class="text-muted m-0">Admin</p>
+                </div>
+            </div>   
+                                
+            <!--sidebar nav start-->
+            <ul class="side-navigation">
+                <li>
+                    <h3 class="navigation-title">Navigation</h3>
+                </li>
+                <li class="{% if request.path == '/' %} active {% endif %}">
+                    <a href="/"><i class="mdi mdi-gauge"></i> <span>Dashboard </span></a>
+                </li>
+                <li class="menu-list {% if request.path == '/price-optimization/create' or request.path == '/price-optimization' %} active nav-active {% endif %}">
+                    <a href="">
+                        <i class="mdi mdi-buffer"></i> 
+                        <span>Price Optimization</span>
+                    </a>
+                    <ul class="child-list">
+                        <li class="{% if request.path == '/price-optimization/create' %} active {% endif %}">
+                            <a href="{{ url_for('createPriceOptimization') }}"> 
+                                Create
+                            </a>
+                        </li>
+                        <li class="{% if request.path == '/price-optimization' %} active {% endif %}">
+                            <a href="{{ url_for('viewPriceOptimization') }}"> 
+                                View
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul><!--sidebar nav end-->
+        </div>
+    </div><!-- sidebar left end-->
+
+    <!-- body content start-->
+    <div class="body-content">
+        <!-- header section start-->
+        <div class="header-section">
+            <!--logo and logo icon start-->
+            <div class="logo">
+                <a href="/">
+                    <span class="logo-img">
+                        <img src="{{ url_for('static', filename='images/logo_sm.png') }}" alt="" height="26">
+                    </span>
+                    <!--<i class="fa fa-maxcdn"></i>-->
+                    <span class="brand-name">Sergio Alves</span>
+                </a>
+            </div>
+
+            <!--toggle button start-->
+            <a class="toggle-btn"><i class="ti ti-menu"></i></a>
+            <!--toggle button end-->
+
+            <!--mega menu start-->
+            <div id="navbar-collapse-1" class="navbar-collapse collapse mega-menu">
+                <ul class="nav navbar-nav">                           
+                    <!-- Classic dropdown -->
+                    <li class="dropdown">
+                        <a href="javascript:;" data-toggle="dropdown" class=""> English <i class="mdi mdi-chevron-down"></i> </a>
+                        <ul role="menu" class="dropdown-menu language-switch">
+                            <li>
+                                <a tabindex="-1" href="javascript:;"> German </a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="javascript:;"> Italian </a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="javascript:;"> French </a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="javascript:;"> Spanish </a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="javascript:;"> Russian </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--mega menu end-->
+
+            <div class="notification-wrap">
+                <!--right notification start-->
+                <div class="right-notification">
+                    <ul class="notification-menu">
+                        <li>
+                            <a href="javascript:;" data-toggle="dropdown">
+                                <img src="{{ url_for('static', filename='/images/users/avatar-1.jpg') }}" alt="">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right profile-menu">
+                                <a class="dropdown-item" href="#"><i class="mdi mdi-account-circle m-r-5 text-muted"></i> Profile</a>
+                                <a class="dropdown-item" href="#"><span class="badge badge-success pull-right">5</span><i class="mdi mdi-settings m-r-5 text-muted"></i> Settings</a>
+                                <a class="dropdown-item" href="#"><i class="mdi mdi-lock-open-outline m-r-5 text-muted"></i> Lock screen</a>
+                                <a class="dropdown-item" href="{{ url_for('logout') }}"><i class="mdi mdi-logout m-r-5 text-muted"></i> Logout</a>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div><!--right notification end-->
+            </div>
+
+        </div>
+        <!-- header section end-->
+
+        {% block content %}
+
+        {% endblock %}
+
+        <!--footer section start-->
+        <footer class="footer">
+            2020 &copy; Sergio Alves.
+        </footer>
+        <!--footer section end-->
+
+    </div>
+    <!--end body content-->
+</section>
+{% endblock %}
+
+
+{% block plugins %}
+<script src="{{ url_for('static', filename='plugins/waypoints/jquery.waypoints.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/sparkline-chart/jquery.sparkline.min.js') }}"></script>
+<script src="{{ url_for('static', filename='pages/jquery.sparkline.init.js') }}"></script>
+
+<script src="{{ url_for('static', filename='plugins/chart-js/Chart.bundle.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/morris-chart/raphael-min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/morris-chart/morris.js') }}"></script>
+<script src="{{ url_for('static', filename='pages/dashboard-init.js') }}"></script>
+{% endblock %}
