@@ -109,8 +109,7 @@ def createPriceOptimization():
     user = get_current_user()
     if user:
         if request.method == 'POST':
-            product_name = request.form['product_name']
-            product_code = request.form['product_code']
+            product_id = request.form['product_id']
             time_steps = int(request.form['time_steps'])
             max_price = int(request.form['max_price'])
             price_step = int(request.form['price_step'])
@@ -119,7 +118,7 @@ def createPriceOptimization():
             unit_cost = int(request.form['product_cost'])
             increase_coefficient = int(request.form['increase_coefficient'])
             decrease_coefficient = int(request.form['decrease_coefficient'])
-            gamma = int(request.form['gamma'])
+            gamma = float(request.form['gamma'])
             target_update = int(request.form['target_update'])
             batch_size = int(request.form['batch_size'])
             learning_rate = float(request.form['learning_rate'])
@@ -129,15 +128,21 @@ def createPriceOptimization():
 
             price_grid = environmentSimulator(max_price, price_step, q_0, k, unit_cost, increase_coefficient, decrease_coefficient)
 
+
             optimal_constant_price = optimalConstantPrice(time_steps, price_grid, unit_cost, q_0, k, increase_coefficient, decrease_coefficient)
             constant_price = formatCurrency(optimal_constant_price['price'])
             constant_profit = formatCurrency(optimal_constant_price['profit'])
+
 
             optimal_sequence_of_prices = optimalSequenceOfPrices(optimal_constant_price, time_steps, price_grid, unit_cost, q_0, k, increase_coefficient, decrease_coefficient)
             sequence_prices = format_currency_v(optimal_sequence_of_prices['prices'])
             sequence_profit = formatCurrency(optimal_sequence_of_prices['profit'])
 
-            best_profit_results = format_currency_v(deepQN(price_grid, time_steps, device, q_0, k, increase_coefficient, decrease_coefficient, unit_cost, gamma, target_update, batch_size, learning_rate, num_episodes))
+
+            best_profit_results = deepQN(price_grid, time_steps, device, q_0, k, increase_coefficient, decrease_coefficient, unit_cost, gamma, target_update, batch_size, learning_rate, num_episodes)
+            best_profit_results = format_currency_v(best_profit_results)
+
+
 
             return render_template('price-optimization/results.html', email=user['email'], env_simulation_plot='/static/images/plot.png', constant_price=constant_price, constant_profit=constant_profit, optimal_seq_price_plot='/static/images/plot2.png', sequence_prices=sequence_prices, sequence_profit=sequence_profit, price_schedules='/static/images/plot3.png', returns_variation='/static/images/plot4.png', best_profit_results=best_profit_results)
 
