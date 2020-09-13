@@ -119,6 +119,60 @@ def plot_price_schedules(p_trace, sampling_ratio, last_highlights, T, fig_number
     plt.plot(range(T), np.array(p_trace[0:-1:sampling_ratio]).T, c = 'k', alpha = 0.05)
     plt.plot(range(T), np.array(p_trace[-(last_highlights+1):-1]).T, c = 'red', alpha = 0.5, linewidth=2)
     plt.savefig('static/images/plot4.png')
+
+def bullet_graph(data, labels=None, bar_label=None, axis_label=None, size=(5, 3), palette=None, bar_color="black", label_color="gray"):
+    stack_data = np.stack(data[:,2])
+
+    cum_stack_data = np.cumsum(stack_data, axis=1)
+    h = np.max(cum_stack_data) / 20
+
+    fig, axarr = plt.subplots(len(data), figsize=size, sharex=True)
+
+    for idx, item in enumerate(data):
+
+        if len(data) > 1:
+            ax = axarr[idx]
+
+        ax.set_aspect('equal')
+        ax.set_yticklabels([item[0]])
+        ax.set_yticks([1])
+        ax.spines['bottom'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['left'].set_visible(False)
+
+        prev_limit = 0
+        for idx2, lim in enumerate(cum_stack_data[idx]):
+            ax.barh([1], lim - prev_limit, left=prev_limit, height=h, color=palette[idx2])
+            prev_limit = lim
+        rects = ax.patches
+        ax.barh([1], item[1], height=(h / 3), color=bar_color)
+
+    if labels is not None:
+        for rect, label in zip(rects, labels):
+            height = rect.get_height()
+            ax.text(
+                rect.get_x() + rect.get_width() / 2,
+                -height * .4,
+                label,
+                ha='center',
+                va='bottom',
+                color=label_color)
+            
+    if bar_label is not None:
+        rect = rects[0]
+        height = rect.get_height()
+        ax.text(
+            rect.get_x() + rect.get_width(),
+            -height * .1,
+            bar_label,
+            ha='center',
+            va='bottom',
+            color='white')
+    if axis_label:
+        ax.set_xlabel(axis_label)
+    fig.subplots_adjust(hspace=0)
+    fig.savefig('static/images/asd.png')
     
 ########################################################   DQN   ###########################################################
 
@@ -287,4 +341,76 @@ def deepQN(price_grid, T, device, q_0, k, increase_coefficient, decrease_coeffic
     fig = plt.figure(figsize=(16, 5))
     plot_price_schedules(p_trace, 5, 1, T, fig.number)
     
-    return sorted(profit_response(s, unit_cost, q_0, k, increase_coefficient, decrease_coefficient) for s in p_trace)[-10:]
+    return dict(profit=sorted(profit_response(s, unit_cost, q_0, k, increase_coefficient, decrease_coefficient) for s in p_trace)[-10:], memory=memory, policy_net=policy_net, target_net=target_net, policy=policy)
+
+################################################## Policy visualization, tuning, and debugging #####################################################
+
+# TD error Debugging Q-values computations
+def TDError(gamma, device, memory, policy_net, target_net):
+
+    transitions = memory.sample(10)
+    batch = Transition(*zip(*transitions))
+
+    non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, batch.next_state)), device=device, dtype=torch.bool)
+    non_final_next_states = torch.stack([s for s in batch.next_state if s is not None])
+
+    state_batch = torch.stack(batch.state)
+    action_batch = torch.cat(batch.action)
+    reward_batch = torch.stack(batch.reward)
+
+    state_action_values = policy_net(state_batch).gather(1, action_batch)
+
+    next_state_values = torch.zeros(len(transitions), device=device)
+    next_state_values[non_final_mask] = target_net(non_final_next_states).max(1)[0].detach()
+
+    expected_state_action_values = (next_state_values * gamma) + reward_batch[:, 0]
+
+    q_trace = []
+    for t in range(len(transitions)):
+        print(f"Q_(s,a)[ {expected_state_action_values[t]} ] = r [ {reward_batch[t].item()} ] + g*Q_(s+1)[ {next_state_values[t]} ]  <> Q_(s,a)[ {state_action_values[t].item()} ]")
+        q_trace.append([f"Sample {t}", state_action_values[t].item(), [reward_batch[t].item(), next_state_values[t]]])
+
+    palette = sns.light_palette("crimson", 3, reverse=False)
+    bullet_graph(np.array(q_trace),
+                labels=["r", "max_a' Q(s', a')"], bar_label="Q(s, a)", size=(20, 10),
+                axis_label="Q-value ($)", label_color="black",
+                bar_color="#252525", palette=palette)
+
+    return q_trace
+
+def correlation(T, gamma, policy_net, policy, price_grid, q_0, k, increase_coefficient, decrease_coefficient, unit_cost):
+    num_episodes = 100
+    return_trace = []
+    q_values_rewards_trace = np.zeros((num_episodes, T, 2, ))
+    for i_episode in range(num_episodes):        # modified copy of the simulation loop
+        state = env_intial_state(T)
+        for t in range(T):
+            # Select and perform an action
+            with torch.no_grad():
+                q_values = policy_net(to_tensor(state)).detach().numpy()
+            action = policy.select_action(q_values)
+
+            next_state, reward = env_step(t, state, action, price_grid, T, q_0, k, increase_coefficient, decrease_coefficient, unit_cost)
+
+            # Move to the next state
+            state = next_state
+
+            q_values_rewards_trace[i_episode][t][0] = q_values[action]
+            for tau in range(t):
+                q_values_rewards_trace[i_episode][tau][1] += reward * (gamma ** (t - tau)) 
+
+
+    # Visualizing the distribution of Q-value vs actual returns 
+    values = np.reshape(q_values_rewards_trace, (num_episodes * T, 2, ))
+
+    df = pd.DataFrame(data=values, columns=['Q-value', 'Return'])
+    g = sns.jointplot(x="Q-value", y="Return", data=df, kind="kde", color="crimson", height=10, aspect=1.0)
+    g.plot_joint(plt.scatter, c="w", s=30, linewidth=1, marker="+", alpha=0.1)
+    g.ax_joint.collections[0].set_alpha(0)
+
+    x0, x1 = g.ax_joint.get_xlim()
+    y0, y1 = g.ax_joint.get_ylim()
+    lims = [max(x0, y0), min(x1, y1)]
+    g.ax_joint.plot(lims, lims, ':k')   
+
+    g.savefig("static/images/plot6.png")

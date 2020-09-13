@@ -139,12 +139,16 @@ def createPriceOptimization():
             sequence_profit = formatCurrency(optimal_sequence_of_prices['profit'])
 
 
-            best_profit_results = deepQN(price_grid, time_steps, device, q_0, k, increase_coefficient, decrease_coefficient, unit_cost, gamma, target_update, batch_size, learning_rate, num_episodes)
-            best_profit_results = format_currency_v(best_profit_results)
+            profit_results = deepQN(price_grid, time_steps, device, q_0, k, increase_coefficient, decrease_coefficient, unit_cost, gamma, target_update, batch_size, learning_rate, num_episodes)
+            best_profit_results = format_currency_v(profit_results['profit'])
 
 
+            q_trace = TDError(gamma, device, profit_results['memory'], profit_results['policy_net'], profit_results['target_net'])
 
-            return render_template('price-optimization/results.html', email=user['email'], env_simulation_plot='/static/images/plot.png', constant_price=constant_price, constant_profit=constant_profit, optimal_seq_price_plot='/static/images/plot2.png', sequence_prices=sequence_prices, sequence_profit=sequence_profit, price_schedules='/static/images/plot3.png', returns_variation='/static/images/plot4.png', best_profit_results=best_profit_results)
+
+            correlation(time_steps, gamma, profit_results['policy_net'], profit_results['policy'], price_grid, q_0, k, increase_coefficient, decrease_coefficient, unit_cost)
+
+            return render_template('price-optimization/results.html', email=user['email'], env_simulation_plot='/static/images/plot.png', constant_price=constant_price, constant_profit=constant_profit, optimal_seq_price_plot='/static/images/plot2.png', sequence_prices=sequence_prices, sequence_profit=sequence_profit, price_schedules='/static/images/plot3.png', returns_variation='/static/images/plot4.png', best_profit_results=best_profit_results, q_trace=q_trace, td_errors='/static/images/asd.png', correlation='/static/images/plot6.png')
 
         return render_template('price-optimization/create.html', email=user['email'])
 
