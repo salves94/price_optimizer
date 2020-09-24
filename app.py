@@ -56,7 +56,7 @@ def register():
         existing_user = user_cur.fetchone()
 
         if existing_user:
-            return render_template('register.html', user=user, error='User already exists!')
+            return render_template('register.html', user=user, error='Email already exists!')
 
         hashed_password = generate_password_hash(request.form['password'], method='sha256')
         db.execute('insert into users (full_name, email, password, admin) values (?, ?, ?, ?)', [request.form['full_name'], request.form['email'], hashed_password, '0'])
@@ -68,8 +68,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     user = get_current_user()
-    error_password = None
-    error_email = None
+    error = None
 
     if request.method == 'POST':
         db = get_db()
@@ -85,11 +84,11 @@ def login():
                 session['email'] = user_result['email']
                 return redirect(url_for('index'))
             else:
-                error_password = 'The password is incorrect.'
+                error = 'Email or password is incorrect.'
         else:
-            error_email = 'The email is incorrect'
+            error = 'Email or password is incorrect.'
 
-    return render_template('login.html', user=user, error_email=error_email, error_password=error_password)
+    return render_template('login.html', user=user, error=error)
 
 @app.route('/logout')
 def logout():
@@ -154,6 +153,65 @@ def createPriceOptimization():
 
     return redirect(url_for('login'))
 
+@app.route('/products')
+def viewProducts():
+    user = get_current_user()
+    if user:
+        db = get_db()
+        products = db.execute('select id, name, sku from products')
+        return render_template('products/view.html', email=user['email'], products=products)
+
+    return redirect(url_for('login'))
+
+@app.route('/products/create', methods=['GET', 'POST'])
+def createProduct():
+    user = get_current_user()
+    if user:
+        if request.method == 'POST':
+            name = request.form['name']
+            sku = request.form['sku']
+            description = request.form['description']
+
+            db = get_db()
+
+            product = db.execute('select name, sku from products where sku = ?', [sku])
+            existing_product = product.fetchone()
+
+            if existing_product:
+                return render_template('products/create.html', product=product, error='Product already exists!')
+
+            db.execute('insert into products (name, sku, description) values (?, ?, ?)', [name, sku, description])
+            db.commit()
+
+            return redirect(url_for('viewProducts'))
+
+        return render_template('products/create.html', email=user['email'])
+
+    return redirect(url_for('login'))
+
+@app.route('/products/edit', methods=['POST'])
+def editProduct():
+    user = get_current_user()
+    if user:
+        print(request.form['name'])
+        """
+        id = request.form['id']
+        name = request.form['name']
+        sku = request.form['sku'] 
+
+        db = get_db()
+
+        product = db.execute('select name, sku from products where sku = ?', [sku])
+        existing_product = product.fetchone()
+
+        if existing_product:
+            return render_template('products/create.html', product=product, error='Product already exists!')
+
+        db.execute('insert into products (name, sku, description) values (?, ?, ?)', [name, sku, description])
+        db.commit()
+"""
+        return redirect(url_for('viewProducts'))
+    return redirect(url_for('login'))
     
 if __name__ == '__main__':
     app.run(debug=True)

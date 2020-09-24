@@ -41,6 +41,24 @@
                         </li>
                     </ul>
                 </li>
+                <li class="menu-list {% if request.path == '/products/create' or request.path == '/products' %} active nav-active {% endif %}">
+                    <a href="">
+                        <i class="mdi mdi-buffer"></i> 
+                        <span>Products</span>
+                    </a>
+                    <ul class="child-list">
+                        <li class="{% if request.path == '/products/create' %} active {% endif %}">
+                            <a href="{{ url_for('createProduct') }}"> 
+                                Create
+                            </a>
+                        </li>
+                        <li class="{% if request.path == '/products' %} active {% endif %}">
+                            <a href="{{ url_for('viewProducts') }}"> 
+                                View
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul><!--sidebar nav end-->
         </div>
     </div><!-- sidebar left end-->

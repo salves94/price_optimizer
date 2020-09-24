@@ -1,0 +1,91 @@
+{% extends "base_dashboard.html" %}
+
+{% block css %}
+<!-- Responsive and DataTables -->
+<link href="{{ url_for('static', filename='plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='plugins/datatables/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="page-head">
+        <h4 class="mt-2 mb-2">Products</h4>
+    </div>
+    <div class="edit-table">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <div class="card m-b-30">
+                    <div class="card-body table-responsive">
+                        <div class="table-odd">
+                            <table id="datatable" class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>SKU</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                {% for p in products %}
+                                    <tr>
+                                        <td>{{ p.id }}</td>
+                                        <td>{{ p.name }}</td>
+                                        <td>{{ p.sku }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>           
+                    </div>
+                </div>
+            </div>
+        </div><!--end row-->
+    </div>                   
+    
+</div><!--end container-->
+
+{% endblock %}
+
+{% block plugins %}
+<!-- Responsive and datatable js -->
+<script src="{{ url_for('static', filename='plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables/dataTables.responsive.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
+
+<!-- Edit datatable js -->
+<script src="{{ url_for('static', filename='plugins/tiny-editable/mindmup-editabletable.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/tiny-editable/numeric-input-example.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/tabledit/jquery.tabledit.js') }}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#datatable').DataTable(); 
+    } );
+</script>
+
+<script type="text/javascript">
+
+    $('#datatable').Tabledit({
+        url:"{{ url_for('editProduct') }}",
+        dataType:'json',
+        columns: {
+            identifier: [0, 'id'],                    
+            editable: [[1, 'name'], [2, 'sku']]
+        },
+        onSuccess:function(data, textStatus, jqXHR)
+        {
+            if(data.action == 'delete')
+            {
+            $('#' + data.id).remove();
+            $('#datatable').DataTable().ajax.reload();
+            }
+        }
+    });
+
+
+</script>
+{% endblock %}

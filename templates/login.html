@@ -16,25 +16,18 @@
                                     </div>                                      
                                     <form class="form mt-5 contact-form" action="{{ url_for('login') }}" method="POST">
                                         <div class="form-group ">
-                                            <div class="col-sm-12">
-                                                {% if error_email %} {{error_email}} {% endif %}                                   
+                                            <div class="col-sm-12">                                                                              
                                                 <input class="form-control form-control-line" name="email" type="email" placeholder="Email" required="required">
                                             </div>
                                         </div>
                                         <div class="form-group ">
                                             <div class="col-sm-12">
-                                                {% if error_password %} {{error_password}} {% endif %}
                                                 <input class="form-control form-control-line" name="password" type="password" placeholder="Password" required="required">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="col-12">
-                                                <label class="cr-styled">
-                                                    <input type="checkbox" checked>
-                                                    <i class="fa"></i> 
-                                                    Remember me
-                                                </label>
+                                                <ul class="parsley-errors-list filled">
+                                                    <li>
+                                                        {% if error %} {{ error }} {% endif %}
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                         
@@ -46,7 +39,7 @@
 
                                         <div class="form-group">
                                             <div class="col-sm-12 mt-4 text-center">
-                                                <a href="recoverpw.html"><i class="fa fa-lock m-r-5"></i> Forgot password?</a>
+                                                <a href="{{ url_for('register') }}"><i class="fa fa-lock m-r-5"></i> Create an Account</a>
                                             </div>
                                         </div>
 
