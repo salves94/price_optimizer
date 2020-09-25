@@ -14,7 +14,12 @@
                         <div class="form-row">
                             <div class="form-group col-md-2">
                                 <label for="product_id">Product</label>
-                                <input type="text" class="form-control" name='product_id' id='product_id' required value='test'>
+                                <select class="select2 form-control mb-3 custom-select" style="width: 100%; height:36px;" id='product_id' name='product_id' required>
+                                    <option value="">Select</option>
+                                    {% for product in products %}
+                                        <option value="{{ product.id }}">{{ product.name }} - {{ product.sku }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="time_steps">Time Steps</label>

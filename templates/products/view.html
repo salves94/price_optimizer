@@ -80,12 +80,11 @@
         {
             if(data.action == 'delete')
             {
-            $('#' + data.id).remove();
-            $('#datatable').DataTable().ajax.reload();
+                $('#' + data.id).remove();
+                //$('#datatable').DataTable().ajax.reload();
             }
         }
     });
-
 
 </script>
 {% endblock %}

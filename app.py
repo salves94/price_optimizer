@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns; sns.set()
 import pandas as pd
 from matplotlib import animation, rc
+import sqlite3
+from flask import jsonify
 
 import torch
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -29,9 +31,18 @@ def get_current_user():
     if 'email' in session:
         email = session['email']
 
-        db = get_db()
-        user_cur = db.execute('select id, full_name, email, password, admin from users where email = ?', [email])
-        user_result = user_cur.fetchone()
+        try:
+            sqliteConnection = get_db()
+            cursor = sqliteConnection.cursor()
+            print("Connected to SQLite")
+
+            sql_select_query = """select * from users where email = ?"""
+            cursor.execute(sql_select_query, (email,))
+            user_result = cursor.fetchone()
+            cursor.close()
+
+        except sqlite3.Error as error:
+            print("Failed to read data from sqlite table", error)
 
     return user_result
 
@@ -149,16 +160,42 @@ def createPriceOptimization():
 
             return render_template('price-optimization/results.html', email=user['email'], env_simulation_plot='/static/images/plot.png', constant_price=constant_price, constant_profit=constant_profit, optimal_seq_price_plot='/static/images/plot2.png', sequence_prices=sequence_prices, sequence_profit=sequence_profit, price_schedules='/static/images/plot3.png', returns_variation='/static/images/plot4.png', best_profit_results=best_profit_results, q_trace=q_trace, td_errors='/static/images/asd.png', correlation='/static/images/plot6.png')
 
-        return render_template('price-optimization/create.html', email=user['email'])
+        try:
+            sqliteConnection = get_db()
+            cursor = sqliteConnection.cursor()
+            print("Connected to SQLite")
+
+            sql_select_query = """select * from products"""
+            cursor.execute(sql_select_query)
+            products = cursor.fetchall()
+            cursor.close()
+
+        except sqlite3.Error as error:
+            print("Failed to read data from sqlite table", error)
+
+        return render_template('price-optimization/create.html', email=user['email'], products=products)
 
     return redirect(url_for('login'))
 
 @app.route('/products')
 def viewProducts():
     user = get_current_user()
+    products = ''
     if user:
-        db = get_db()
-        products = db.execute('select id, name, sku from products')
+
+        try:
+            sqliteConnection = get_db()
+            cursor = sqliteConnection.cursor()
+            print("Connected to SQLite")
+
+            sql_select_query = """select * from products"""
+            cursor.execute(sql_select_query)
+            products = cursor.fetchall()
+            cursor.close()
+
+        except sqlite3.Error as error:
+            print("Failed to read data from sqlite table", error)
+                
         return render_template('products/view.html', email=user['email'], products=products)
 
     return redirect(url_for('login'))
@@ -193,25 +230,49 @@ def createProduct():
 def editProduct():
     user = get_current_user()
     if user:
-        print(request.form['name'])
-        """
         id = request.form['id']
-        name = request.form['name']
-        sku = request.form['sku'] 
+        if (request.form['action'] == 'delete'):
+            try:
+                sqliteConnection = get_db()
+                cursor = sqliteConnection.cursor()
+                print("Connected to SQLite")
 
-        db = get_db()
+                sql_delete_query = """DELETE from products where id = ?"""
+                cursor.execute(sql_delete_query, [id])
+                sqliteConnection.commit()
+                print("Record deleted successfully ")
+                cursor.close()
 
-        product = db.execute('select name, sku from products where sku = ?', [sku])
-        existing_product = product.fetchone()
+            except sqlite3.Error as error:
+                print("Failed to delete record from sqlite table", error)
 
-        if existing_product:
-            return render_template('products/create.html', product=product, error='Product already exists!')
+            finally:
+                return jsonify(action='delete', id=id)
 
-        db.execute('insert into products (name, sku, description) values (?, ?, ?)', [name, sku, description])
-        db.commit()
-"""
-        return redirect(url_for('viewProducts'))
+        if (request.form['action'] == 'edit'):            
+            name = request.form['name']
+            sku = request.form['sku']
+
+            try:
+                sqliteConnection = get_db()
+                cursor = sqliteConnection.cursor()
+                print("Connected to SQLite")
+
+                sqlite_update_query = """Update products set name = ?, sku = ? where id = ?"""
+                columnValues = (name, sku, id)
+                cursor.execute(sqlite_update_query, columnValues)
+                sqliteConnection.commit()
+                print("Total", cursor.rowcount, "Records updated successfully")
+                sqliteConnection.commit()
+                cursor.close()
+
+            except sqlite3.Error as error:
+                print("Failed to update multiple records of sqlite table", error)
+
+            finally:
+                return jsonify(action='edit', id=id)
+                
     return redirect(url_for('login'))
-    
+
 if __name__ == '__main__':
     app.run(debug=True)
