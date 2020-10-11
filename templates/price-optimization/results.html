@@ -15,14 +15,70 @@
 <div class="container-fluid">
     <div class="page-head">
         <h4 class="my-2">Price Optimization</h4>
-        <button class="btn btn-danger"><a href="{{ url_for('deletePriceOptimization', id=price_optimization.id) }}" style="color: inherit;">Delete</a></button>
+        <button class="btn btn-danger"><a href="{{ url_for('deletePriceOptimization', id=price_optimization_results.id) }}" style="color: inherit;">Delete</a></button>
     </div>
     <div class="row">
         <div class="col-12">
             <div class="card m-b-30">
                 <div class="card-body">
+                    <h5 class="header-title pb-3">Input Variables</h5>
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12">
+                                    <div class="widget-box bg-white m-b-30">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead class="thead-dark">
+                                                    <tr>
+                                                        <th>Product ID</th>
+                                                        <th>Time Steps</th>
+                                                        <th>Maximum valid price</th>
+                                                        <th>Price step</th>
+                                                        <th>Intercept in demand</th>
+                                                        <th>Slope in demand function</th>
+                                                        <th>Product cost</th>
+                                                        <th>Price increase coefficient</th>
+                                                        <th>Price decrease coefficient</th>
+                                                        <th>Gamma</th>
+                                                        <th>Target Update</th>
+                                                        <th>Batch Size</th>
+                                                        <th>Learning Rate</th>
+                                                        <th># of Episodes</th>
+                                                    </tr>                                                        
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{{ price_optimization_inputs.product_id }}</td>
+                                                        <td>{{ price_optimization_inputs.time_steps }}</td>
+                                                        <td>{{ price_optimization_inputs.max_price }}</td>
+                                                        <td>{{ price_optimization_inputs.price_step }}</td>
+                                                        <td>{{ price_optimization_inputs.q_0 }}</td>
+                                                        <td>{{ price_optimization_inputs.k }}</td>
+                                                        <td>{{ price_optimization_inputs.unit_cost }}</td>
+                                                        <td>{{ price_optimization_inputs.increase_coefficient }}</td>
+                                                        <td>{{ price_optimization_inputs.decrease_coefficient }}</td>
+                                                        <td>{{ price_optimization_inputs.gamma }}</td>
+                                                        <td>{{ price_optimization_inputs.target_update }}</td>
+                                                        <td>{{ price_optimization_inputs.batch_size }}</td>
+                                                        <td>{{ price_optimization_inputs.learning_rate }}</td>
+                                                        <td>{{ price_optimization_inputs.num_episodes }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="card m-b-30">
+                <div class="card-body">
                     <h5 class="header-title pb-3">Environment simulator</h5>          
-                    <img src=/{{ price_optimization.env_simulation_src }} alt="Chart" height="auto" width="100%">
+                    <img src=/{{ price_optimization_results.env_simulation_src }} alt="Chart" height="auto" width="100%">
                 </div>
             </div>
 
@@ -40,7 +96,7 @@
                                                     <div class="text-center"><i class="ti ti-money"></i></div>
                                                 </div>
                                                 <div class="col-8">
-                                                    <h2 class="m-0 counter">{{ price_optimization.constant_price }}</h2>
+                                                    <h2 class="m-0 counter">{{ price_optimization_results.constant_price }}</h2>
                                                     <p>Optimal price</p> 
                                                 </div>
                                             </div>
@@ -53,7 +109,7 @@
                                                     <div class="text-center"><i class="ti ti-wallet"></i></div>
                                                 </div>
                                                 <div class="col-8">
-                                                    <h2 class="m-0 counter">{{ price_optimization.constant_profit }} </h2>
+                                                    <h2 class="m-0 counter">{{ price_optimization_results.constant_profit }} </h2>
                                                     <p>Achieved profit</p> 
                                                 </div>
                                             </div>
@@ -77,12 +133,14 @@
                                         <div class="table-responsive">
                                             <table class="table">
                                                 <thead class="thead-dark">
-                                                    <th>Period:</th>
-                                                    {% for i in range(sequence_prices|length) %}
-                                                        <th style="text-align: right;">
-                                                            {{ i+1 }}
-                                                        </th>
-                                                    {% endfor %}
+                                                    <tr>
+                                                        <th>Period:</th>
+                                                        {% for i in range(sequence_prices|length) %}
+                                                            <th style="text-align: right;">
+                                                                {{ i+1 }}
+                                                            </th>
+                                                        {% endfor %}
+                                                    </tr>                                                        
                                                 </thead>
                                                 <tbody>
                                                     <tr>
@@ -105,7 +163,7 @@
                                                 <div class="text-center"><i class="ti ti-wallet"></i></div>
                                             </div>
                                             <div class="col-8">
-                                                <h2 class="m-0 counter">{{ price_optimization.sequence_profit }} </h2>
+                                                <h2 class="m-0 counter">{{ price_optimization_results.sequence_profit }} </h2>
                                                 <p>Achieved profit</p> 
                                             </div>
                                         </div>
@@ -114,21 +172,21 @@
                             </div>
                         </div> 
                     </div>
-                    <img src=/{{ price_optimization.optimal_seq_price_src }} alt="Chart" height="auto" width="100%">
+                    <img src=/{{ price_optimization_results.optimal_seq_price_src }} alt="Chart" height="auto" width="100%">
                 </div>
             </div>
 
             <div class="card m-b-30">
                 <div class="card-body">
                     <h5 class="header-title pb-3">Simulation Results - Pricing Schedules</h5>
-                    <img src=/{{ price_optimization.returns_variation_src }} alt="Chart" height="auto" width="100%">
+                    <img src=/{{ price_optimization_results.returns_variation_src }} alt="Chart" height="auto" width="100%">
                 </div>
             </div>
 
             <div class="card m-b-30">
                 <div class="card-body">
                     <h5 class="header-title pb-3">Simulation Results - Variation of Returns</h5>
-                    <img src=/{{ price_optimization.price_schedules_src }} alt="Chart" height="auto" width="100%">
+                    <img src=/{{ price_optimization_results.price_schedules_src }} alt="Chart" height="auto" width="100%">
                 </div>
             </div>
 
@@ -143,12 +201,14 @@
                                         <div class="table-responsive">
                                             <table class="table">
                                                 <thead class="thead-dark">
-                                                    <th>Period:</th>
-                                                    {% for i in range(best_profit_results|length) %}
-                                                        <th style="text-align: right;">
-                                                            {{ i+1 }}
-                                                        </th>
-                                                    {% endfor %}
+                                                    <tr>
+                                                        <th>Period:</th>
+                                                        {% for i in range(best_profit_results|length) %}
+                                                            <th style="text-align: right;">
+                                                                {{ i+1 }}
+                                                            </th>
+                                                        {% endfor %}
+                                                    </tr>                                                        
                                                 </thead>
                                                 <tbody>
                                                     <tr>
@@ -173,14 +233,14 @@
             <div class="card m-b-30">
                 <div class="card-body">
                     <h5 class="header-title pb-3">TD Errors</h5>
-                    <img src=/{{ price_optimization.td_errors_src }} alt="Chart" height="auto" width="100%">
+                    <img src=/{{ price_optimization_results.td_errors_src }} alt="Chart" height="auto" width="100%">
                 </div>
             </div>
 
             <div class="card m-b-30">
                 <div class="card-body">
                     <h5 class="header-title pb-3">Correlation between Q-values and returns </h5>
-                    <img src=/{{ price_optimization.correlation_src }} alt="Chart" height="auto" width="100%">
+                    <img src=/{{ price_optimization_results.correlation_src }} alt="Chart" height="auto" width="100%">
                 </div>
             </div>        
         </div>

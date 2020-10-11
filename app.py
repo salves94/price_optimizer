@@ -216,19 +216,24 @@ def viewPriceOptimizationId(price_optimization_results_id):
 
             sql_select_query = "select * from price_optimization_results where id = ?"
             cursor.execute(sql_select_query, (price_optimization_results_id,))
-            price_optimization = cursor.fetchone()
+            price_optimization_results = cursor.fetchone()
+
+            sql_select_query = "select * from price_optimization_inputs where id = ?"
+            cursor.execute(sql_select_query, (price_optimization_results['price_optimization_inputs_id'],))
+            price_optimization_inputs = cursor.fetchone()
+
             cursor.close()
 
         except sqlite3.Error as error:
             print("Failed to read data from sqlite table", error)
 
-        sequence_prices = price_optimization['sequence_prices'][1:-1]
-        best_profit_results = price_optimization['best_profit_results'][1:-1]
+        sequence_prices = price_optimization_results['sequence_prices'][1:-1]
+        best_profit_results = price_optimization_results['best_profit_results'][1:-1]
 
         sequence_prices = sequence_prices.replace("'", '').split(' ')
         best_profit_results = best_profit_results.replace("'", '').split(' ')
 
-        return render_template('price-optimization/results.html', email=user['email'], price_optimization=price_optimization, sequence_prices=sequence_prices, best_profit_results=best_profit_results)
+        return render_template('price-optimization/results.html', email=user['email'], price_optimization_results=price_optimization_results, price_optimization_inputs=price_optimization_inputs, sequence_prices=sequence_prices, best_profit_results=best_profit_results)
 
     return redirect(url_for('login'))
 
