@@ -1,0 +1,48 @@
+create table price_optimizer.users (
+    id integer primary key AUTO_INCREMENT,
+    full_name varchar(50) not null,
+    email varchar(50) not null unique,
+    password varchar(50) not null
+);
+
+create table price_optimizer.products (
+    id integer primary key AUTO_INCREMENT,
+    name varchar(50) not null,
+    sku varchar(50) not null unique
+);
+
+create table price_optimizer.price_optimization_inputs (
+    id integer primary key AUTO_INCREMENT,
+    product_id integer not null REFERENCES products(id),
+    time_steps integer not null,
+    max_price real not null,
+    price_step real not null,
+    q_0 real not null,
+    k real not null,
+    product_cost real not null,
+    a_q real not null,
+    b_q real not null,
+    gamma real not null,
+    target_update real not null,
+    batch_size integer not null,
+    learning_rate real not null,
+    n_episodes integer not null
+);
+
+create table price_optimizer.price_optimization_results(
+    id integer primary key AUTO_INCREMENT,
+    price_optimization_inputs_id integer not null REFERENCES price_optimization_inputs(id),
+    constant_price real not null,
+    constant_profit real not null,
+    sequence_prices mediumtext not null,
+    sequence_profit mediumtext not null,
+    best_profit_results mediumtext not null,
+    env_simulation_src varchar(50) not null,
+    optimal_seq_price_src varchar(50) not null,
+    returns_variation_src varchar(50) not null,
+    price_schedules_src varchar(50) not null,
+    td_errors_src varchar(50) not null,
+    correlation_src varchar(50) not null,
+    CONSTRAINT price_optimization_inputs_id UNIQUE (price_optimization_inputs_id)
+);
+

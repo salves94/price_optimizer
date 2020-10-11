@@ -1,1 +1,64 @@
 {% extends "base_dashboard.html" %}
+
+{% block css %}
+<!-- Responsive and DataTables -->
+<link href="{{ url_for('static', filename='plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='plugins/datatables/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='plugins/datatables/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="page-head">
+        <h4 class="mt-2 mb-2">Price Optimizations</h4>
+    </div>
+    <div class="edit-table">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <div class="card m-b-30">
+                    <div class="card-body table-responsive">
+                        <div class="table-odd">
+                            <table id="datatable" class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>SKU</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                {% for p in price_optimization %}
+                                    <tr>
+                                        <td><a href="{{ url_for('viewPriceOptimizationId', price_optimization_results_id=p.results_id) }}">{{ p.results_id }}</a></td>
+                                        <td>{{ p.name }}</td>
+                                        <td>{{ p.sku }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>           
+                    </div>
+                </div>
+            </div>
+        </div><!--end row-->
+    </div>                   
+    
+</div><!--end container-->
+
+{% endblock %}
+
+{% block plugins %}
+<!-- Responsive and datatable js -->
+<script src="{{ url_for('static', filename='plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables/dataTables.responsive.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#datatable').DataTable(); 
+    } );
+</script>
+{% endblock %}

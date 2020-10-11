@@ -23,7 +23,7 @@
                 <li class="{% if request.path == '/' %} active {% endif %}">
                     <a href="/"><i class="mdi mdi-gauge"></i> <span>Dashboard </span></a>
                 </li>
-                <li class="menu-list {% if request.path == '/price-optimization/create' or request.path == '/price-optimization' %} active nav-active {% endif %}">
+                <li class="menu-list {% if '/price-optimization' in request.path %} active nav-active {% endif %}">
                     <a href="">
                         <i class="mdi mdi-buffer"></i> 
                         <span>Price Optimization</span>
@@ -90,19 +90,7 @@
                         <a href="javascript:;" data-toggle="dropdown" class=""> English <i class="mdi mdi-chevron-down"></i> </a>
                         <ul role="menu" class="dropdown-menu language-switch">
                             <li>
-                                <a tabindex="-1" href="javascript:;"> German </a>
-                            </li>
-                            <li>
-                                <a tabindex="-1" href="javascript:;"> Italian </a>
-                            </li>
-                            <li>
-                                <a tabindex="-1" href="javascript:;"> French </a>
-                            </li>
-                            <li>
                                 <a tabindex="-1" href="javascript:;"> Spanish </a>
-                            </li>
-                            <li>
-                                <a tabindex="-1" href="javascript:;"> Russian </a>
                             </li>
                         </ul>
                     </li>

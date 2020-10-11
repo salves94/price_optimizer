@@ -1,35 +1,100 @@
 {% extends "base_dashboard.html" %}
 
 {% block content %}
-<div class="page-head">
-    <h4 class="my-2">Price Optimization</h4>
-</div>
-<div class="row">
-    <div class="col-12">
-        <div class="card m-b-30">
-            <div class="card-body">
-                <h5 class="header-title pb-3">Environment simulator</h5>          
-                <img src={{ env_simulation_plot }} alt="Chart" height="auto" width="100%">
+<style>
+    .page-head {
+        display: flex;
+        justify-content: left;
+        position: relative;
+    }
+    button {
+        position: absolute;
+        right: 0;
+    }
+</style>
+<div class="container-fluid">
+    <div class="page-head">
+        <h4 class="my-2">Price Optimization</h4>
+        <button class="btn btn-danger"><a href="{{ url_for('deletePriceOptimization', id=price_optimization.id) }}" style="color: inherit;">Delete</a></button>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <h5 class="header-title pb-3">Environment simulator</h5>          
+                    <img src=/{{ price_optimization.env_simulation_src }} alt="Chart" height="auto" width="100%">
+                </div>
             </div>
-        </div>
 
-        <div class="card m-b-30">
-            <div class="card-body">
-                <h5 class="header-title pb-3">Optimal constant price</h5>           
-                <div class="general-label">
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <h5 class="header-title pb-3">Optimal constant price</h5>           
+                    <div class="general-label">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-6">
+                                        <div class="widget-box bg-white m-b-30">
+                                            <div class="row d-flex align-items-center text-center">
+                                                <div class="col-4">
+                                                    <div class="text-center"><i class="ti ti-money"></i></div>
+                                                </div>
+                                                <div class="col-8">
+                                                    <h2 class="m-0 counter">{{ price_optimization.constant_price }}</h2>
+                                                    <p>Optimal price</p> 
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="col-lg-6 col-sm-6">
+                                        <div class="widget-box bg-white m-b-30">
+                                            <div class="row d-flex align-items-center text-center">
+                                                <div class="col-4">
+                                                    <div class="text-center"><i class="ti ti-wallet"></i></div>
+                                                </div>
+                                                <div class="col-8">
+                                                    <h2 class="m-0 counter">{{ price_optimization.constant_profit }} </h2>
+                                                    <p>Achieved profit</p> 
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>                                
+                </div>
+            </div>
+
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <h5 class="header-title pb-3">Optimal Sequence of Prices</h5>
                     <div class="row">
                         <div class="col-lg-12 col-sm-12">
                             <div class="row">
                                 <div class="col-lg-6 col-sm-6">
                                     <div class="widget-box bg-white m-b-30">
-                                        <div class="row d-flex align-items-center text-center">
-                                            <div class="col-4">
-                                                <div class="text-center"><i class="ti ti-money"></i></div>
-                                            </div>
-                                            <div class="col-8">
-                                                <h2 class="m-0 counter">{{ constant_price }}</h2>
-                                                <p>Optimal price</p> 
-                                            </div>
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead class="thead-dark">
+                                                    <th>Period:</th>
+                                                    {% for i in range(sequence_prices|length) %}
+                                                        <th style="text-align: right;">
+                                                            {{ i+1 }}
+                                                        </th>
+                                                    {% endfor %}
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Price:</td>
+                                                        {% for i in sequence_prices %}
+                                                            <td>
+                                                                {{ i }}
+                                                            </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div> 
                                 </div>
@@ -40,7 +105,7 @@
                                                 <div class="text-center"><i class="ti ti-wallet"></i></div>
                                             </div>
                                             <div class="col-8">
-                                                <h2 class="m-0 counter">{{ constant_profit }} </h2>
+                                                <h2 class="m-0 counter">{{ price_optimization.sequence_profit }} </h2>
                                                 <p>Achieved profit</p> 
                                             </div>
                                         </div>
@@ -49,120 +114,76 @@
                             </div>
                         </div> 
                     </div>
-                </div>                                
-            </div>
-        </div>
-
-        <div class="card m-b-30">
-            <div class="card-body">
-                <h5 class="header-title pb-3">Optimal Sequence of Prices</h5>
-                <div class="row">
-                    <div class="col-lg-12 col-sm-12">
-                        <div class="row">
-                            <div class="col-lg-6 col-sm-6">
-                                <div class="widget-box bg-white m-b-30">
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <thead class="thead-dark">
-                                                <th>Period:</th>
-                                                {% for i in range(sequence_prices.shape[0]) %}
-                                                    <th style="text-align: right;">
-                                                        {{ i+1 }}
-                                                    </th>
-                                                {% endfor %}
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Price:</td>
-                                                    {% for i in sequence_prices %}
-                                                        <td>
-                                                            {{ i }}
-                                                        </td>
-                                                    {% endfor %}
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="col-lg-6 col-sm-6">
-                                <div class="widget-box bg-white m-b-30">
-                                    <div class="row d-flex align-items-center text-center">
-                                        <div class="col-4">
-                                            <div class="text-center"><i class="ti ti-wallet"></i></div>
-                                        </div>
-                                        <div class="col-8">
-                                            <h2 class="m-0 counter">{{ sequence_profit }} </h2>
-                                            <p>Achieved profit</p> 
-                                        </div>
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>
-                    </div> 
-                </div>
-                <img src={{ optimal_seq_price_plot }} alt="Chart" height="auto" width="100%">
-            </div>
-        </div>
-
-        <div class="card m-b-30">
-            <div class="card-body">
-                <h5 class="header-title pb-3">Simulation Results - Pricing Schedules</h5>
-                <img src={{ returns_variation }} alt="Chart" height="auto" width="100%">
-            </div>
-        </div>
-
-        <div class="card m-b-30">
-            <div class="card-body">
-                <h5 class="header-title pb-3">Simulation Results - Variation of Returns</h5>
-                <img src={{ price_schedules }} alt="Chart" height="auto" width="100%">
-            </div>
-        </div>
-
-        <div class="card m-b-30">
-            <div class="card-body">
-                <h5 class="header-title pb-3">Simulation Results - Best Profit Results</h5>
-                <div class="row">
-                    <div class="col-lg-12 col-sm-12">
-                        <div class="row">
-                            <div class="col-lg-12 col-sm-12">
-                                <div class="widget-box bg-white m-b-30">
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <tbody>
-                                                <tr>
-                                                    <td>Profits:</td>
-                                                    {% for i in best_profit_results %}
-                                                        <td>
-                                                            {{ i }}
-                                                        </td>
-                                                    {% endfor %}
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>
-                    </div> 
+                    <img src=/{{ price_optimization.optimal_seq_price_src }} alt="Chart" height="auto" width="100%">
                 </div>
             </div>
-        </div>
 
-        <div class="card m-b-30">
-            <div class="card-body">
-                <h5 class="header-title pb-3">TD Errors</h5>
-                <img src={{ td_errors }} alt="Chart" height="auto" width="100%">
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <h5 class="header-title pb-3">Simulation Results - Pricing Schedules</h5>
+                    <img src=/{{ price_optimization.returns_variation_src }} alt="Chart" height="auto" width="100%">
+                </div>
             </div>
-        </div>
 
-        <div class="card m-b-30">
-            <div class="card-body">
-                <h5 class="header-title pb-3">Correlation between Q-values and returns </h5>
-                <img src={{ correlation }} alt="Chart" height="auto" width="100%">
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <h5 class="header-title pb-3">Simulation Results - Variation of Returns</h5>
+                    <img src=/{{ price_optimization.price_schedules_src }} alt="Chart" height="auto" width="100%">
+                </div>
             </div>
-        </div>        
+
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <h5 class="header-title pb-3">Simulation Results - Best Profit Results</h5>
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12">
+                                    <div class="widget-box bg-white m-b-30">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead class="thead-dark">
+                                                    <th>Period:</th>
+                                                    {% for i in range(best_profit_results|length) %}
+                                                        <th style="text-align: right;">
+                                                            {{ i+1 }}
+                                                        </th>
+                                                    {% endfor %}
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Profits:</td>
+                                                        {% for i in best_profit_results %}
+                                                            <td>
+                                                                {{ i }}
+                                                            </td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <h5 class="header-title pb-3">TD Errors</h5>
+                    <img src=/{{ price_optimization.td_errors_src }} alt="Chart" height="auto" width="100%">
+                </div>
+            </div>
+
+            <div class="card m-b-30">
+                <div class="card-body">
+                    <h5 class="header-title pb-3">Correlation between Q-values and returns </h5>
+                    <img src=/{{ price_optimization.correlation_src }} alt="Chart" height="auto" width="100%">
+                </div>
+            </div>        
+        </div>
     </div>
 </div>
-
 {% endblock %}

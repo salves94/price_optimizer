@@ -44,7 +44,7 @@ def profit_response(p, unit_cost, q_0, k, increase_coefficient, decrease_coeffic
 
 ##################################################################################################################################
 
-def environmentSimulator(max_price, price_step, q_0, k, unit_cost, increase_coefficient, decrease_coefficient):
+def environmentSimulator(max_price, price_step, q_0, k, unit_cost, increase_coefficient, decrease_coefficient, env_simulation_src):
     price_grid = np.arange(price_step, max_price, price_step)
     price_change_grid = np.arange(0.5, 2.0, 0.1)
     profit_map = np.zeros( (len(price_grid), len(price_change_grid)) )
@@ -64,7 +64,7 @@ def environmentSimulator(max_price, price_step, q_0, k, unit_cost, increase_coef
     plt.ylabel("Profit")
     plt.legend(np.int_(np.round((1-price_change_grid)*100)), loc='lower right', title="Price change (%)", fancybox=False, framealpha=0.6)
 
-    plt.savefig('static/images/plot.png')
+    plt.savefig(env_simulation_src)
     return price_grid
 
 def optimalConstantPrice(time_steps, price_grid, unit_cost, q_0, k, increase_coefficient, decrease_coefficient):
@@ -74,7 +74,7 @@ def optimalConstantPrice(time_steps, price_grid, unit_cost, q_0, k, increase_coe
 
     return dict(price=price_opt_const, profit=constant_profit[p_idx])
 
-def optimalSequenceOfPrices(optimal_constant_price, time_steps, price_grid, unit_cost, q_0, k, increase_coefficient, decrease_coefficient):
+def optimalSequenceOfPrices(optimal_constant_price, time_steps, price_grid, unit_cost, q_0, k, increase_coefficient, decrease_coefficient, optimal_seq_price_src):
     prices = np.repeat(optimal_constant_price['price'], time_steps)
     for t in range(time_steps):
         price_t = findOptimalPriceT(prices, price_grid, t, unit_cost, q_0, k, increase_coefficient, decrease_coefficient)
@@ -86,7 +86,7 @@ def optimalSequenceOfPrices(optimal_constant_price, time_steps, price_grid, unit
     plt.xlabel("Time step")
     plt.ylabel("Price ($)")
     plt.plot(range(len(prices)), prices, c='red')
-    plt.savefig('static/images/plot2.png')
+    plt.savefig(optimal_seq_price_src)
 
     return dict(prices=prices, profit=profit)
 
@@ -101,7 +101,7 @@ def formatCurrency(value):
 
 ############################################################################################################################
 
-def plot_return_trace(returns, smoothing_window=10, range_std=2):
+def plot_return_trace(returns, returns_variation_src, smoothing_window=10, range_std=2):
     plt.figure(figsize=(16, 5))
     plt.xlabel("Episode")
     plt.ylabel("Return ($)")
@@ -110,17 +110,17 @@ def plot_return_trace(returns, smoothing_window=10, range_std=2):
     mstd = returns_df.rolling(window=smoothing_window).std()
     plt.plot(ma, c = 'blue', alpha = 1.00, linewidth = 1)
     plt.fill_between(mstd.index, ma-range_std*mstd, ma+range_std*mstd, color='blue', alpha=0.2)
-    plt.savefig('static/images/plot3.png')
+    plt.savefig(returns_variation_src)
 
-def plot_price_schedules(p_trace, sampling_ratio, last_highlights, T, fig_number=None):
+def plot_price_schedules(p_trace, sampling_ratio, last_highlights, T, price_schedules_src, fig_number=None):
     plt.figure(fig_number);
     plt.xlabel("Time step");
     plt.ylabel("Price ($)");
     plt.plot(range(T), np.array(p_trace[0:-1:sampling_ratio]).T, c = 'k', alpha = 0.05)
     plt.plot(range(T), np.array(p_trace[-(last_highlights+1):-1]).T, c = 'red', alpha = 0.5, linewidth=2)
-    plt.savefig('static/images/plot4.png')
+    plt.savefig(price_schedules_src)
 
-def bullet_graph(data, labels=None, bar_label=None, axis_label=None, size=(5, 3), palette=None, bar_color="black", label_color="gray"):
+def bullet_graph(data, td_errors_src, labels=None, bar_label=None, axis_label=None, size=(5, 3), palette=None, bar_color="black", label_color="gray"):
     stack_data = np.stack(data[:,2])
 
     cum_stack_data = np.cumsum(stack_data, axis=1)
@@ -172,7 +172,7 @@ def bullet_graph(data, labels=None, bar_label=None, axis_label=None, size=(5, 3)
     if axis_label:
         ax.set_xlabel(axis_label)
     fig.subplots_adjust(hspace=0)
-    fig.savefig('static/images/asd.png')
+    fig.savefig(td_errors_src)
     
 ########################################################   DQN   ###########################################################
 
@@ -287,7 +287,7 @@ def to_tensor(x):
 def to_tensor_long(x, device):
     return torch.tensor([[x]], device=device, dtype=torch.long)
 
-def deepQN(price_grid, T, device, q_0, k, increase_coefficient, decrease_coefficient, unit_cost, gamma, target_update, batch_size, learning_rate, num_episodes):
+def deepQN(price_grid, T, device, q_0, k, increase_coefficient, decrease_coefficient, unit_cost, gamma, target_update, batch_size, learning_rate, num_episodes, returns_variation_src, price_schedules_src):
     policy_net = PolicyNetworkDQN(2*T, len(price_grid)).to(device)
     target_net = PolicyNetworkDQN(2*T, len(price_grid)).to(device)
     optimizer = optim.AdamW(policy_net.parameters(), lr = learning_rate)
@@ -336,17 +336,17 @@ def deepQN(price_grid, T, device, q_0, k, increase_coefficient, decrease_coeffic
             #clear_output(wait = True)
             print(f'Episode {i_episode} of {num_episodes} ({i_episode/num_episodes*100:.2f}%)')
 
-    plot_return_trace(return_trace)
+    plot_return_trace(return_trace, returns_variation_src)
 
     fig = plt.figure(figsize=(16, 5))
-    plot_price_schedules(p_trace, 5, 1, T, fig.number)
+    plot_price_schedules(p_trace, 5, 1, T, price_schedules_src, fig.number)
     
     return dict(profit=sorted(profit_response(s, unit_cost, q_0, k, increase_coefficient, decrease_coefficient) for s in p_trace)[-10:], memory=memory, policy_net=policy_net, target_net=target_net, policy=policy)
 
 ################################################## Policy visualization, tuning, and debugging #####################################################
 
 # TD error Debugging Q-values computations
-def TDError(gamma, device, memory, policy_net, target_net):
+def TDError(gamma, device, memory, policy_net, target_net, td_errors_src):
 
     transitions = memory.sample(10)
     batch = Transition(*zip(*transitions))
@@ -371,14 +371,14 @@ def TDError(gamma, device, memory, policy_net, target_net):
         q_trace.append([f"Sample {t}", state_action_values[t].item(), [reward_batch[t].item(), next_state_values[t]]])
 
     palette = sns.light_palette("crimson", 3, reverse=False)
-    bullet_graph(np.array(q_trace),
+    bullet_graph(np.array(q_trace), td_errors_src,
                 labels=["r", "max_a' Q(s', a')"], bar_label="Q(s, a)", size=(20, 10),
                 axis_label="Q-value ($)", label_color="black",
                 bar_color="#252525", palette=palette)
 
     return q_trace
 
-def correlation(T, gamma, policy_net, policy, price_grid, q_0, k, increase_coefficient, decrease_coefficient, unit_cost):
+def correlation(T, gamma, policy_net, policy, price_grid, q_0, k, increase_coefficient, decrease_coefficient, unit_cost, correlation_src):
     num_episodes = 100
     return_trace = []
     q_values_rewards_trace = np.zeros((num_episodes, T, 2, ))
@@ -413,4 +413,4 @@ def correlation(T, gamma, policy_net, policy, price_grid, q_0, k, increase_coeff
     lims = [max(x0, y0), min(x1, y1)]
     g.ax_joint.plot(lims, lims, ':k')   
 
-    g.savefig("static/images/plot6.png")
+    g.savefig(correlation_src)
