@@ -14,12 +14,15 @@ import pandas as pd
 from matplotlib import animation, rc
 import sqlite3
 from flask import jsonify
+from flask_babel import Babel
 
 import torch
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+babel = Babel(app)
 ROOT = 'static/images/'
 
 @app.teardown_appcontext
