@@ -11,7 +11,7 @@
 
 <div class="container-fluid">
     <div class="page-head">
-        <h4 class="mt-2 mb-2">Price Optimizations</h4>
+        <h4 class="mt-2 mb-2">{{ _('Price Optimizations') }}</h4>
     </div>
     <div class="edit-table">
         <div class="row">
@@ -22,9 +22,9 @@
                             <table id="datatable" class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>SKU</th>
+                                    <th>{{ _('ID') }}</th>
+                                    <th>{{ _('Name') }}</th>
+                                    <th>{{ _('SKU') }}</th>
                                 </tr>
                                 </thead>
 
@@ -38,13 +38,13 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
-                        </div>           
+                        </div>
                     </div>
                 </div>
             </div>
         </div><!--end row-->
-    </div>                   
-    
+    </div>
+
 </div><!--end container-->
 
 {% endblock %}
@@ -58,7 +58,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#datatable').DataTable(); 
+        $('#datatable').DataTable();
     } );
 </script>
 {% endblock %}

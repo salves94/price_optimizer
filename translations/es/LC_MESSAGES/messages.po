@@ -1,0 +1,243 @@
+# Spanish translations for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-10-19 09:04-0400\n"
+"PO-Revision-Date: 2020-10-19 09:06-0400\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es\n"
+"Language-Team: es <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+#: app.py:106 app.py:108
+msgid "Email or password is incorrect."
+msgstr "Email o contraseña es incorrecta"
+
+#: templates/base_dashboard.html:13
+msgid "Home"
+msgstr "Inicio"
+
+#: templates/base_dashboard.html:19 templates/price-optimization/create.html:6
+#: templates/price-optimization/results.html:17
+msgid "Price Optimization"
+msgstr "Optimización de Precio"
+
+#: templates/base_dashboard.html:24 templates/base_dashboard.html:42
+msgid "Create"
+msgstr "Crear"
+
+#: templates/base_dashboard.html:29 templates/base_dashboard.html:47
+msgid "View"
+msgstr "Ver"
+
+#: templates/base_dashboard.html:37 templates/products/create.html:6
+#: templates/products/create.html:12 templates/products/view.html:14
+msgid "Products"
+msgstr "Productos"
+
+#: templates/base_dashboard.html:64 templates/general.html:10
+msgid "Price Optimizer"
+msgstr "Optimizador de Precios"
+
+#: templates/base_dashboard.html:77
+msgid "English"
+msgstr "Inglés"
+
+#: templates/base_dashboard.html:80
+msgid "Spanish"
+msgstr "Español"
+
+#: templates/base_dashboard.html:97
+msgid "Logout"
+msgstr "Salir"
+
+#: templates/login.html:15
+msgid "Welcome to the Price Optimizer"
+msgstr "Bienvenido al Optimizador de Precios"
+
+#: templates/login.html:42
+msgid "Create an Account"
+msgstr "Crear una Cuenta"
+
+#: templates/register.html:15
+msgid "Register"
+msgstr "Registrar"
+
+#: templates/register.html:41
+msgid "Sign Up"
+msgstr "Registrarse"
+
+#: templates/register.html:47
+msgid "Already have an account?"
+msgstr "¿Ya tienes una cuenta?"
+
+#: templates/price-optimization/create.html:12
+#: templates/price-optimization/results.html:24
+msgid "Input Variables"
+msgstr "Variables de Entrada"
+
+#: templates/price-optimization/create.html:17
+msgid "Product"
+msgstr "Producto"
+
+#: templates/price-optimization/create.html:19
+msgid "Select"
+msgstr "Seleccionar"
+
+#: templates/price-optimization/create.html:26
+#: templates/price-optimization/results.html:35
+msgid "Time Steps"
+msgstr "Pasos de Tiempo"
+
+#: templates/price-optimization/create.html:30
+#: templates/price-optimization/results.html:36
+msgid "Maximum Valid Price"
+msgstr "Precio Válido Máximo"
+
+#: templates/price-optimization/create.html:34
+#: templates/price-optimization/results.html:37
+msgid "Price Step"
+msgstr "Paso de Precio"
+
+#: templates/price-optimization/create.html:38
+#: templates/price-optimization/results.html:38
+msgid "Intercept in Demand"
+msgstr "Intercepción en Demanda"
+
+#: templates/price-optimization/create.html:42
+#: templates/price-optimization/results.html:39
+msgid "Slope in Demand Function"
+msgstr "Pendiente en Función de Demanda"
+
+#: templates/price-optimization/create.html:48
+#: templates/price-optimization/results.html:40
+msgid "Product Cost"
+msgstr "Costo de Producto"
+
+#: templates/price-optimization/create.html:52
+#: templates/price-optimization/results.html:41
+msgid "Price Increase Coefficient"
+msgstr "Coeficiente de Incremento de Precio"
+
+#: templates/price-optimization/create.html:56
+#: templates/price-optimization/results.html:42
+msgid "Price Decrease Coefficient"
+msgstr "Coeficiente de Disminución de Precio"
+
+#: templates/price-optimization/create.html:60
+#: templates/price-optimization/results.html:43
+msgid "Gamma"
+msgstr "Gamma"
+
+#: templates/price-optimization/create.html:64
+#: templates/price-optimization/results.html:44
+msgid "Target Update"
+msgstr "Actualización de Objetivo"
+
+#: templates/price-optimization/create.html:68
+#: templates/price-optimization/results.html:45
+msgid "Batch Size"
+msgstr "Tamaño del Lote"
+
+#: templates/price-optimization/create.html:74
+#: templates/price-optimization/results.html:46
+msgid "Learning Rate"
+msgstr "Tasa de Aprendizaje"
+
+#: templates/price-optimization/create.html:78
+#: templates/price-optimization/results.html:47
+msgid "# of Episodes"
+msgstr "# de Episodios"
+
+#: templates/price-optimization/create.html:82
+#: templates/products/create.html:30
+msgid "Submit"
+msgstr "Enviar"
+
+#: templates/price-optimization/results.html:34
+msgid "Product ID"
+msgstr "ID del Producto"
+
+#: templates/price-optimization/results.html:80
+msgid "Environment Simulator"
+msgstr "Simulador de Entorno"
+
+#: templates/price-optimization/results.html:87
+msgid "Optimal Constant Price"
+msgstr "Precio Constante Óptimo"
+
+#: templates/price-optimization/results.html:100
+msgid "Optimal Price"
+msgstr "Precio Óptimo"
+
+#: templates/price-optimization/results.html:113
+msgid "Achieved profit"
+msgstr "Ganancia Obtenida"
+
+#: templates/price-optimization/results.html:127
+msgid "Optimal Sequence of Prices"
+msgstr "Secuencia de Precios Óptimos"
+
+#: templates/price-optimization/results.html:137
+#: templates/price-optimization/results.html:205
+msgid "Period"
+msgstr "Período"
+
+#: templates/price-optimization/results.html:147
+msgid "Price"
+msgstr "Precio"
+
+#: templates/price-optimization/results.html:167
+msgid "Achieved Profit"
+msgstr "Ganancia Obtenida"
+
+#: templates/price-optimization/results.html:181
+msgid "Simulation Results - Pricing Schedules"
+msgstr "Resultados de la simulación: horarios de precios"
+
+#: templates/price-optimization/results.html:188
+msgid "Simulation Results - Variation of Returns"
+msgstr "Resultados de la simulación: variación de los rendimientos"
+
+#: templates/price-optimization/results.html:195
+msgid "Simulation Results - Best Profit Results"
+msgstr "Resultados de simulación: mejores resultados de beneficios"
+
+#: templates/price-optimization/results.html:215
+msgid "Profits"
+msgstr "Ganancias"
+
+#: templates/price-optimization/results.html:235
+msgid "TD Errors"
+msgstr "Errores TD"
+
+#: templates/price-optimization/results.html:242
+msgid "Correlation Between Q-Values and Returns"
+msgstr "Correlación entre valores Q y rendimientos"
+
+#: templates/price-optimization/view.html:14
+msgid "Price Optimizations"
+msgstr "Optimizaciones de Precios"
+
+#: templates/price-optimization/view.html:25 templates/products/view.html:25
+msgid "ID"
+msgstr "ID"
+
+#: templates/price-optimization/view.html:26 templates/products/create.html:17
+#: templates/products/view.html:26
+msgid "Name"
+msgstr "Nombre"
+
+#: templates/price-optimization/view.html:27 templates/products/create.html:21
+#: templates/products/view.html:27
+msgid "SKU"
+msgstr "SKU"

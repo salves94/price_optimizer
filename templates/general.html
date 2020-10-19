@@ -7,7 +7,7 @@
         <meta name="author" content="Sergio Alves">
         <meta name="keyword" content="Price Optimization">
 
-        <title>Sergio Alves | Price Optimizer</title>
+        <title>{{ _('Price Optimizer') }}</title>
 
         <!-- Theme icon -->
         <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
@@ -26,7 +26,7 @@
     <body class="sticky-header">
         <!-- Body -->
         {% block body %}{% endblock %}
-        
+
         <!-- jQuery -->
         <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>

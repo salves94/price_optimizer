@@ -5,56 +5,46 @@
     <div class="sidebar-left">
         <div class="sidebar-left-info">
 
-            <div class="user-box">
-                <div class="d-flex justify-content-center">
-                    <img src="{{ url_for('static', filename='images/users/photo.jpeg') }}" alt="" class="img-fluid rounded-circle"> 
-                </div>
-                <div class="text-center text-white mt-2">
-                    <h6> {{ email }} </h6>
-                    <p class="text-muted m-0">Admin</p>
-                </div>
-            </div>   
-                                
             <!--sidebar nav start-->
             <ul class="side-navigation">
-                <li>
-                    <h3 class="navigation-title">Navigation</h3>
-                </li>
                 <li class="{% if request.path == '/' %} active {% endif %}">
-                    <a href="/"><i class="mdi mdi-gauge"></i> <span>Dashboard </span></a>
+                    <a href="/">
+                      <i class="mdi mdi-gauge"></i>
+                      <span>{{ _('Home') }}</span>
+                    </a>
                 </li>
                 <li class="menu-list {% if '/price-optimization' in request.path %} active nav-active {% endif %}">
                     <a href="">
-                        <i class="mdi mdi-buffer"></i> 
-                        <span>Price Optimization</span>
+                        <i class="mdi mdi-buffer"></i>
+                        <span>{{ _('Price Optimization') }}</span>
                     </a>
                     <ul class="child-list">
                         <li class="{% if request.path == '/price-optimization/create' %} active {% endif %}">
-                            <a href="{{ url_for('createPriceOptimization') }}"> 
-                                Create
+                            <a href="{{ url_for('createPriceOptimization') }}">
+                                {{ _('Create') }}
                             </a>
                         </li>
                         <li class="{% if request.path == '/price-optimization' %} active {% endif %}">
-                            <a href="{{ url_for('viewPriceOptimization') }}"> 
-                                View
+                            <a href="{{ url_for('viewPriceOptimization') }}">
+                                {{ _('View') }}
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li class="menu-list {% if request.path == '/products/create' or request.path == '/products' %} active nav-active {% endif %}">
                     <a href="">
-                        <i class="mdi mdi-buffer"></i> 
-                        <span>Products</span>
+                        <i class="mdi mdi-buffer"></i>
+                        <span>{{ _('Products') }}</span>
                     </a>
                     <ul class="child-list">
                         <li class="{% if request.path == '/products/create' %} active {% endif %}">
-                            <a href="{{ url_for('createProduct') }}"> 
-                                Create
+                            <a href="{{ url_for('createProduct') }}">
+                                {{ _('Create') }}
                             </a>
                         </li>
                         <li class="{% if request.path == '/products' %} active {% endif %}">
-                            <a href="{{ url_for('viewProducts') }}"> 
-                                View
+                            <a href="{{ url_for('viewProducts') }}">
+                                {{ _('View') }}
                             </a>
                         </li>
                     </ul>
@@ -70,11 +60,8 @@
             <!--logo and logo icon start-->
             <div class="logo">
                 <a href="/">
-                    <span class="logo-img">
-                        <img src="{{ url_for('static', filename='images/logo_sm.png') }}" alt="" height="26">
-                    </span>
                     <!--<i class="fa fa-maxcdn"></i>-->
-                    <span class="brand-name">Sergio Alves</span>
+                    <span class="brand-name">{{ _('Price Optimizer') }}</span>
                 </a>
             </div>
 
@@ -84,13 +71,18 @@
 
             <!--mega menu start-->
             <div id="navbar-collapse-1" class="navbar-collapse collapse mega-menu">
-                <ul class="nav navbar-nav">                           
+                <ul class="nav navbar-nav">
                     <!-- Classic dropdown -->
                     <li class="dropdown">
-                        <a href="javascript:;" data-toggle="dropdown" class=""> English <i class="mdi mdi-chevron-down"></i> </a>
+                        <a href="javascript:;" data-toggle="dropdown" class=""> {{ _('Language') }}
+                          <i class="mdi mdi-chevron-down"></i>
+                        </a>
                         <ul role="menu" class="dropdown-menu language-switch">
                             <li>
-                                <a tabindex="-1" href="javascript:;"> Spanish </a>
+                                <a tabindex="-1" href="{{ url_for('setLanguage', language='en') }}"> {{ _('English') }} </a>
+                            </li>
+                            <li>
+                                <a tabindex="-1" href="{{ url_for('setLanguage', language='es') }}"> {{ _('Spanish') }} </a>
                             </li>
                         </ul>
                     </li>
@@ -104,13 +96,10 @@
                     <ul class="notification-menu">
                         <li>
                             <a href="javascript:;" data-toggle="dropdown">
-                                <img src="{{ url_for('static', filename='/images/users/avatar-1.jpg') }}" alt="">
+                                <img src="{{ url_for('static', filename='/images/settings.png') }}" alt="">
                             </a>
                             <div class="dropdown-menu dropdown-menu-right profile-menu">
-                                <a class="dropdown-item" href="#"><i class="mdi mdi-account-circle m-r-5 text-muted"></i> Profile</a>
-                                <a class="dropdown-item" href="#"><span class="badge badge-success pull-right">5</span><i class="mdi mdi-settings m-r-5 text-muted"></i> Settings</a>
-                                <a class="dropdown-item" href="#"><i class="mdi mdi-lock-open-outline m-r-5 text-muted"></i> Lock screen</a>
-                                <a class="dropdown-item" href="{{ url_for('logout') }}"><i class="mdi mdi-logout m-r-5 text-muted"></i> Logout</a>
+                                <a class="dropdown-item" href="{{ url_for('logout') }}"><i class="mdi mdi-logout m-r-5 text-muted"></i> {{ _('Logout') }}</a>
                             </div>
 
                         </li>

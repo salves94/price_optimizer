@@ -4,7 +4,7 @@ from database import get_db
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
-import math 
+import math
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -14,7 +14,7 @@ import pandas as pd
 from matplotlib import animation, rc
 import sqlite3
 from flask import jsonify
-from flask_babel import Babel
+from flask_babel import Babel, format_date, gettext
 
 import torch
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -24,6 +24,28 @@ app.config['SECRET_KEY'] = os.urandom(24)
 app.config['BABEL_DEFAULT_LOCALE'] = 'en'
 babel = Babel(app)
 ROOT = 'static/images/'
+
+@babel.localeselector
+def get_locale():
+    language = 'en'
+    if 'email' in session:
+        email = session['email']
+
+        try:
+            sqliteConnection = get_db()
+            cursor = sqliteConnection.cursor()
+            print("Connected to SQLite")
+
+            sql_select_query = """select language from users where email = ?"""
+            cursor.execute(sql_select_query, (email,))
+            result = cursor.fetchone()
+            language = result['language']
+            cursor.close()
+
+        except sqlite3.Error as error:
+            print("Failed to read data from sqlite table", error)
+
+    return language
 
 @app.teardown_appcontext
 def close_db(error):
@@ -74,7 +96,7 @@ def register():
             return render_template('register.html', user=user, error='Email already exists!')
 
         hashed_password = generate_password_hash(request.form['password'], method='sha256')
-        db.execute('insert into users (full_name, email, password) values (?, ?, ?)', [request.form['full_name'], request.form['email'], hashed_password])
+        db.execute('insert into users (full_name, email, password, language) values (?, ?, ?, ?)', [request.form['full_name'], request.form['email'], hashed_password, request.form['language']])
         db.commit()
         return redirect(url_for('index'))
 
@@ -91,7 +113,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        user_cur = db.execute('select id, full_name, email, password from users where email = ?', [email])
+        user_cur = db.execute('select * from users where email = ?', [email])
         user_result = user_cur.fetchone()
 
         if user_result:
@@ -99,11 +121,33 @@ def login():
                 session['email'] = user_result['email']
                 return redirect(url_for('index'))
             else:
-                error = 'Email or password is incorrect.'
+                error = gettext('Email or password is incorrect.')
         else:
-            error = 'Email or password is incorrect.'
+            error = gettext('Email or password is incorrect.')
 
     return render_template('login.html', user=user, error=error)
+
+@app.route('/language/<language>')
+def setLanguage(language):
+
+    email = session['email']
+    try:
+        sqliteConnection = get_db()
+        cursor = sqliteConnection.cursor()
+        print("Connected to SQLite")
+
+        sqlite_update_query = """Update users set language = ? where email = ?"""
+        columnValues = (language, email)
+        cursor.execute(sqlite_update_query, columnValues)
+        sqliteConnection.commit()
+        print("Total", cursor.rowcount, "Records updated successfully")
+        sqliteConnection.commit()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to update multiple records of sqlite table", error)
+
+    return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
@@ -189,7 +233,7 @@ def createPriceOptimization():
                 sqliteConnection.rollback()
                 print(error)
 
-            return redirect(url_for('viewPriceOptimizationId', price_optimization_results_id=price_optimization_results_id))            
+            return redirect(url_for('viewPriceOptimizationId', price_optimization_results_id=price_optimization_results_id))
 
         try:
             sqliteConnection = get_db()
@@ -273,7 +317,7 @@ def deletePriceOptimization(id):
 
             sql_select_query = "select price_optimization_inputs_id, env_simulation_src, optimal_seq_price_src, returns_variation_src, price_schedules_src, td_errors_src, correlation_src from price_optimization_results where id = ?"
             cursor.execute(sql_select_query, (id,))
-            price_optimization_results = cursor.fetchone()            
+            price_optimization_results = cursor.fetchone()
 
             if os.path.exists(price_optimization_results['env_simulation_src']):
                 os.remove(price_optimization_results['env_simulation_src'])
@@ -339,7 +383,7 @@ def viewProducts():
 
         except sqlite3.Error as error:
             print("Failed to read data from sqlite table", error)
-                
+
         return render_template('products/view.html', email=user['email'], products=products)
 
     return redirect(url_for('login'))
@@ -395,7 +439,7 @@ def editProduct():
             finally:
                 return jsonify(action='delete', id=id)
 
-        if (request.form['action'] == 'edit'):            
+        if (request.form['action'] == 'edit'):
             name = request.form['name']
             sku = request.form['sku']
 
@@ -417,7 +461,7 @@ def editProduct():
 
             finally:
                 return jsonify(action='edit', id=id)
-                
+
     return redirect(url_for('login'))
 
 if __name__ == '__main__':

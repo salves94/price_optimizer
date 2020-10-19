@@ -2,7 +2,8 @@ create table "users" (
     "id" integer primary key autoincrement,
     "full_name" text not null,
     "email" text not null unique,
-    "password" text not null
+    "password" text not null,
+    "language" text not null DEFAULT "en"
 );
 
 create table "products" (
@@ -52,4 +53,3 @@ create table "price_optimization_results"(
         REFERENCES price_optimization_inputs(id)
         ON DELETE CASCADE
 );
-
