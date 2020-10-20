@@ -15,7 +15,11 @@
 <div class="container-fluid">
     <div class="page-head">
         <h4 class="my-2">{{ _('Price Optimization') }}</h4>
-        <button class="btn btn-danger"><a href="{{ url_for('deletePriceOptimization', id=price_optimization_results.id) }}" style="color: inherit;">Delete</a></button>
+        <button class="btn btn-danger">
+          <a href="{{ url_for('deletePriceOptimization', id=price_optimization_results.id) }}" style="color: inherit;">
+            {{ _('Delete') }}
+          </a>
+        </button>
     </div>
     <div class="row">
         <div class="col-12">

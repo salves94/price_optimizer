@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-10-19 09:04-0400\n"
+"POT-Creation-Date: 2020-10-19 20:02-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
-#: app.py:106 app.py:108
+#: app.py:124 app.py:126
 msgid "Email or password is incorrect."
 msgstr ""
 
@@ -39,7 +39,7 @@ msgid "View"
 msgstr ""
 
 #: templates/base_dashboard.html:37 templates/products/create.html:6
-#: templates/products/create.html:12 templates/products/view.html:14
+#: templates/products/view.html:14
 msgid "Products"
 msgstr ""
 
@@ -47,15 +47,19 @@ msgstr ""
 msgid "Price Optimizer"
 msgstr ""
 
-#: templates/base_dashboard.html:77
+#: templates/base_dashboard.html:77 templates/register.html:42
+msgid "Language"
+msgstr ""
+
+#: templates/base_dashboard.html:82 templates/register.html:43
 msgid "English"
 msgstr ""
 
-#: templates/base_dashboard.html:80
+#: templates/base_dashboard.html:85 templates/register.html:44
 msgid "Spanish"
 msgstr ""
 
-#: templates/base_dashboard.html:97
+#: templates/base_dashboard.html:102
 msgid "Logout"
 msgstr ""
 
@@ -71,20 +75,21 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: templates/register.html:41
+#: templates/register.html:51
 msgid "Sign Up"
 msgstr ""
 
-#: templates/register.html:47
+#: templates/register.html:57
 msgid "Already have an account?"
 msgstr ""
 
 #: templates/price-optimization/create.html:12
-#: templates/price-optimization/results.html:24
+#: templates/price-optimization/results.html:28
 msgid "Input Variables"
 msgstr ""
 
 #: templates/price-optimization/create.html:17
+#: templates/products/create.html:12
 msgid "Product"
 msgstr ""
 
@@ -93,133 +98,137 @@ msgid "Select"
 msgstr ""
 
 #: templates/price-optimization/create.html:26
-#: templates/price-optimization/results.html:35
+#: templates/price-optimization/results.html:39
 msgid "Time Steps"
 msgstr ""
 
 #: templates/price-optimization/create.html:30
-#: templates/price-optimization/results.html:36
+#: templates/price-optimization/results.html:40
 msgid "Maximum Valid Price"
 msgstr ""
 
 #: templates/price-optimization/create.html:34
-#: templates/price-optimization/results.html:37
+#: templates/price-optimization/results.html:41
 msgid "Price Step"
 msgstr ""
 
-#: templates/price-optimization/create.html:38
-#: templates/price-optimization/results.html:38
+#: templates/price-optimization/create.html:40
+#: templates/price-optimization/results.html:42
 msgid "Intercept in Demand"
 msgstr ""
 
-#: templates/price-optimization/create.html:42
-#: templates/price-optimization/results.html:39
+#: templates/price-optimization/create.html:44
+#: templates/price-optimization/results.html:43
 msgid "Slope in Demand Function"
 msgstr ""
 
 #: templates/price-optimization/create.html:48
-#: templates/price-optimization/results.html:40
+#: templates/price-optimization/results.html:44
 msgid "Product Cost"
 msgstr ""
 
 #: templates/price-optimization/create.html:52
-#: templates/price-optimization/results.html:41
+#: templates/price-optimization/results.html:45
 msgid "Price Increase Coefficient"
 msgstr ""
 
-#: templates/price-optimization/create.html:56
-#: templates/price-optimization/results.html:42
+#: templates/price-optimization/create.html:58
+#: templates/price-optimization/results.html:46
 msgid "Price Decrease Coefficient"
 msgstr ""
 
-#: templates/price-optimization/create.html:60
-#: templates/price-optimization/results.html:43
+#: templates/price-optimization/create.html:62
+#: templates/price-optimization/results.html:47
 msgid "Gamma"
 msgstr ""
 
-#: templates/price-optimization/create.html:64
-#: templates/price-optimization/results.html:44
+#: templates/price-optimization/create.html:66
+#: templates/price-optimization/results.html:48
 msgid "Target Update"
 msgstr ""
 
-#: templates/price-optimization/create.html:68
-#: templates/price-optimization/results.html:45
+#: templates/price-optimization/create.html:70
+#: templates/price-optimization/results.html:49
 msgid "Batch Size"
 msgstr ""
 
-#: templates/price-optimization/create.html:74
-#: templates/price-optimization/results.html:46
+#: templates/price-optimization/create.html:76
+#: templates/price-optimization/results.html:50
 msgid "Learning Rate"
 msgstr ""
 
-#: templates/price-optimization/create.html:78
-#: templates/price-optimization/results.html:47
+#: templates/price-optimization/create.html:80
+#: templates/price-optimization/results.html:51
 msgid "# of Episodes"
 msgstr ""
 
-#: templates/price-optimization/create.html:82
+#: templates/price-optimization/create.html:84
 #: templates/products/create.html:30
 msgid "Submit"
 msgstr ""
 
-#: templates/price-optimization/results.html:34
+#: templates/price-optimization/results.html:20
+msgid "Delete"
+msgstr ""
+
+#: templates/price-optimization/results.html:38
 msgid "Product ID"
 msgstr ""
 
-#: templates/price-optimization/results.html:80
+#: templates/price-optimization/results.html:84
 msgid "Environment Simulator"
 msgstr ""
 
-#: templates/price-optimization/results.html:87
+#: templates/price-optimization/results.html:91
 msgid "Optimal Constant Price"
 msgstr ""
 
-#: templates/price-optimization/results.html:100
+#: templates/price-optimization/results.html:104
 msgid "Optimal Price"
 msgstr ""
 
-#: templates/price-optimization/results.html:113
+#: templates/price-optimization/results.html:117
 msgid "Achieved profit"
 msgstr ""
 
-#: templates/price-optimization/results.html:127
+#: templates/price-optimization/results.html:131
 msgid "Optimal Sequence of Prices"
 msgstr ""
 
-#: templates/price-optimization/results.html:137
-#: templates/price-optimization/results.html:205
+#: templates/price-optimization/results.html:141
+#: templates/price-optimization/results.html:209
 msgid "Period"
 msgstr ""
 
-#: templates/price-optimization/results.html:147
+#: templates/price-optimization/results.html:151
 msgid "Price"
 msgstr ""
 
-#: templates/price-optimization/results.html:167
+#: templates/price-optimization/results.html:171
 msgid "Achieved Profit"
 msgstr ""
 
-#: templates/price-optimization/results.html:181
+#: templates/price-optimization/results.html:185
 msgid "Simulation Results - Pricing Schedules"
 msgstr ""
 
-#: templates/price-optimization/results.html:188
+#: templates/price-optimization/results.html:192
 msgid "Simulation Results - Variation of Returns"
 msgstr ""
 
-#: templates/price-optimization/results.html:195
+#: templates/price-optimization/results.html:199
 msgid "Simulation Results - Best Profit Results"
 msgstr ""
 
-#: templates/price-optimization/results.html:215
+#: templates/price-optimization/results.html:219
 msgid "Profits"
 msgstr ""
 
-#: templates/price-optimization/results.html:235
+#: templates/price-optimization/results.html:239
 msgid "TD Errors"
 msgstr ""
 
-#: templates/price-optimization/results.html:242
+#: templates/price-optimization/results.html:246
 msgid "Correlation Between Q-Values and Returns"
 msgstr ""
 

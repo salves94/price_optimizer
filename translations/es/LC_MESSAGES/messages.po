@@ -48,6 +48,10 @@ msgstr "Productos"
 msgid "Price Optimizer"
 msgstr "Optimizador de Precios"
 
+#: templates/base_dashboard.html:77 templates/register.html:42
+msgid "Language"
+msgstr "Idioma"
+
 #: templates/base_dashboard.html:77
 msgid "English"
 msgstr "Inglés"
@@ -162,6 +166,10 @@ msgstr "# de Episodios"
 #: templates/products/create.html:30
 msgid "Submit"
 msgstr "Enviar"
+
+#: templates/price-optimization/results.html:20
+msgid "Delete"
+msgstr "Eliminar"
 
 #: templates/price-optimization/results.html:34
 msgid "Product ID"
