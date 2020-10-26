@@ -29,7 +29,7 @@ def q_t(p_t, p_t_1, q_0, k, a, b):
 
 # Profit at time step t
 def profit_t(p_t, p_t_1, q_0, k, a, b, unit_cost):
-    return q_t(p_t, p_t_1, q_0, k, a, b)*(p_t - unit_cost) 
+    return q_t(p_t, p_t_1, q_0, k, a, b)*(p_t - unit_cost)
 
 # Total profit for price vector p over len(p) time steps
 def profit_total(p, unit_cost, q_0, k, a, b):
@@ -59,7 +59,7 @@ def environmentSimulator(max_price, price_step, q_0, k, unit_cost, increase_coef
         else:
             color = (0.6, 0.3, price_change_grid[i]/2.0)
         plt.plot(price_grid, profit_map[:, i], c=color)
-    
+
     plt.xlabel("Price ($)")
     plt.ylabel("Profit")
     plt.legend(np.int_(np.round((1-price_change_grid)*100)), loc='lower right', title="Price change (%)", fancybox=False, framealpha=0.6)
@@ -158,7 +158,7 @@ def bullet_graph(data, td_errors_src, labels=None, bar_label=None, axis_label=No
                 ha='center',
                 va='bottom',
                 color=label_color)
-            
+
     if bar_label is not None:
         rect = rects[0]
         height = rect.get_height()
@@ -173,7 +173,7 @@ def bullet_graph(data, td_errors_src, labels=None, bar_label=None, axis_label=No
         ax.set_xlabel(axis_label)
     fig.subplots_adjust(hspace=0)
     fig.savefig(td_errors_src)
-    
+
 ########################################################   DQN   ###########################################################
 
 from collections import namedtuple
@@ -221,7 +221,7 @@ class PolicyNetworkDQN(nn.Module):
 
     def forward(self, x):
       q_values = self.model(x)
-      return q_values  
+      return q_values
 
 class AnnealedEpsGreedyPolicy(object):
   def __init__(self, eps_start = 0.9, eps_end = 0.05, eps_decay = 400):
@@ -258,11 +258,11 @@ def update_model(memory, policy_net, target_net, device, optimizer, gamma, batch
     next_state_values[non_final_mask] = target_net(non_final_next_states).max(1)[0].detach()
 
     # Compute the expected Q values
-    expected_state_action_values = reward_batch[:, 0] + (gamma * next_state_values)  
+    expected_state_action_values = reward_batch[:, 0] + (gamma * next_state_values)
 
     # Compute Huber loss
     loss = F.smooth_l1_loss(state_action_values, expected_state_action_values.unsqueeze(1))
-    
+
     # Optimize the model
     optimizer.zero_grad()
     loss.backward()
@@ -312,9 +312,9 @@ def deepQN(price_grid, T, device, q_0, k, increase_coefficient, decrease_coeffic
             next_state, reward = env_step(t, state, action, price_grid, T, q_0, k, increase_coefficient, decrease_coefficient, unit_cost)
 
             # Store the transition in memory
-            memory.push(to_tensor(state), 
-                        to_tensor_long(action, device), 
-                        to_tensor(next_state) if t != T - 1 else None, 
+            memory.push(to_tensor(state),
+                        to_tensor_long(action, device),
+                        to_tensor(next_state) if t != T - 1 else None,
                         to_tensor([reward]))
 
             # Move to the next state
@@ -340,7 +340,7 @@ def deepQN(price_grid, T, device, q_0, k, increase_coefficient, decrease_coeffic
 
     fig = plt.figure(figsize=(16, 5))
     plot_price_schedules(p_trace, 5, 1, T, price_schedules_src, fig.number)
-    
+
     return dict(profit=sorted(profit_response(s, unit_cost, q_0, k, increase_coefficient, decrease_coefficient) for s in p_trace)[-10:], memory=memory, policy_net=policy_net, target_net=target_net, policy=policy)
 
 ################################################## Policy visualization, tuning, and debugging #####################################################
@@ -397,10 +397,10 @@ def correlation(T, gamma, policy_net, policy, price_grid, q_0, k, increase_coeff
 
             q_values_rewards_trace[i_episode][t][0] = q_values[action]
             for tau in range(t):
-                q_values_rewards_trace[i_episode][tau][1] += reward * (gamma ** (t - tau)) 
+                q_values_rewards_trace[i_episode][tau][1] += reward * (gamma ** (t - tau))
 
 
-    # Visualizing the distribution of Q-value vs actual returns 
+    # Visualizing the distribution of Q-value vs actual returns
     values = np.reshape(q_values_rewards_trace, (num_episodes * T, 2, ))
 
     df = pd.DataFrame(data=values, columns=['Q-value', 'Return'])
@@ -411,6 +411,6 @@ def correlation(T, gamma, policy_net, policy, price_grid, q_0, k, increase_coeff
     x0, x1 = g.ax_joint.get_xlim()
     y0, y1 = g.ax_joint.get_ylim()
     lims = [max(x0, y0), min(x1, y1)]
-    g.ax_joint.plot(lims, lims, ':k')   
+    g.ax_joint.plot(lims, lims, ':k')
 
     g.savefig(correlation_src)

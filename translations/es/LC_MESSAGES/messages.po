@@ -115,12 +115,12 @@ msgstr "Paso de Precio"
 #: templates/price-optimization/create.html:38
 #: templates/price-optimization/results.html:38
 msgid "Intercept in Demand"
-msgstr "Intercepción en Demanda"
+msgstr "Intercepto en Demanda"
 
 #: templates/price-optimization/create.html:42
 #: templates/price-optimization/results.html:39
-msgid "Slope in Demand Function"
-msgstr "Pendiente en Función de Demanda"
+msgid "Slope in Demand"
+msgstr "Pendiente en Demanda"
 
 #: templates/price-optimization/create.html:48
 #: templates/price-optimization/results.html:40
@@ -210,15 +210,15 @@ msgstr "Ganancia Obtenida"
 
 #: templates/price-optimization/results.html:181
 msgid "Simulation Results - Pricing Schedules"
-msgstr "Resultados de la simulación: horarios de precios"
+msgstr "Resultados de la Simulación: Política de Precios"
 
 #: templates/price-optimization/results.html:188
 msgid "Simulation Results - Variation of Returns"
-msgstr "Resultados de la simulación: variación de los rendimientos"
+msgstr "Resultados de la Simulación: Variación de los Rendimientos"
 
 #: templates/price-optimization/results.html:195
 msgid "Simulation Results - Best Profit Results"
-msgstr "Resultados de simulación: mejores resultados de beneficios"
+msgstr "Resultados de Simulación: Mejores Resultados de Beneficios"
 
 #: templates/price-optimization/results.html:215
 msgid "Profits"
